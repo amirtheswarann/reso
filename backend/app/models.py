@@ -96,8 +96,9 @@ class ItemsPublic(SQLModel):
 class Message(SQLModel):
     message: str
 
-class ResearchInsight(SQLModel):
-    company_research: str
+class CompanyResearchRequest(SQLModel):
+    company_name: str = Field(min_length=1, max_length=255)
+    insights_requested: list[str]
 
 
 # JSON payload containing access token
@@ -117,3 +118,10 @@ class NewPassword(SQLModel):
 
 class CompanyResearch(SQLModel):
     company: str
+
+class AStreamStatus(SQLModel):
+    type: str
+    data: str
+
+class AStreamResult(AStreamStatus):
+    insight: str

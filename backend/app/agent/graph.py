@@ -106,11 +106,10 @@ async def research_company(
     # Initialize Serper client
     # SERPER_API_KEY environment variable must be set.
     # You can pass serper_api_key=os.getenv("SERPER_API_KEY") if explicit control is needed.
-    serper_client = GoogleSerperAPIWrapper(k=max_search_results)
+    serper_client = GoogleSerperAPIWrapper(k=max_search_results, serper_api_key=os.getenv("SERPER_API_KEY"))
 
     search_results_futures = []
     for query in state.search_queries:
-        # GoogleSerperAPIWrapper.results is sync, so use asyncio.to_thread
         search_results_futures.append(
             asyncio.to_thread(serper_client.results, query)
         )

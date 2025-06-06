@@ -70,7 +70,7 @@ const AddItem = () => {
       size={{ base: "xs", md: "md" }}
       placement="center"
       open={isOpen}
-      onOpenChange={({ open }) => setIsOpen(open)}
+      onOpenChange={({ open }: { open: boolean }) => setIsOpen(open)}
     >
       <DialogTrigger asChild>
         <Button value="add-item" my={4}>

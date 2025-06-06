@@ -1,87 +1,57 @@
-import React, { useEffect, useState } from "react"
+
 import {
-  Box,
   Container,
-  Text,
-  Input,
-  Button,
-  VStack,
-  Code,
-  Spinner,
+
 } from "@chakra-ui/react"
 import { createFileRoute } from "@tanstack/react-router"
 
-import useAuth from "@/hooks/useAuth"
+import CompanyResearchPage from "@/components/researchAgent/companyResearchPage" // Import the component
 
 export const Route = createFileRoute("/_layout/")({
   component: CompanyResearch,
 })
 
 function CompanyResearch() {
-  const { user: currentUser } = useAuth()
-  const [companyName, setCompanyName] = useState("")
-  const [insights, setInsights] = useState<string[]>([])
-  const [loading, setLoading] = useState(false)
+// Removed unused state since CompanyResearchPage handles its own state management
+  // const [loading, setLoading] = useState(false) // This state seems unused if CompanyResearchPage handles its own loading
 
-  const handleStartResearch = async () => {
-    setInsights([])
-    setLoading(true)
+  // The following SSE logic might be redundant if CompanyResearchPage handles its own API calls and SSE.
+  // If CompanyResearchPage is self-contained, you can remove this.
+  // If this page is meant to *control* CompanyResearchPage, then a props-based or context-based communication
+  // would be needed, which is more complex than just displaying it.
+  // For now, I'll assume you want to display CompanyResearchPage and let it manage its own state.
+  // const handleStartResearch = async () => {
+  //   setInsights([])
+  //   setLoading(true)
 
-    const eventSource = new EventSource(`/api/company_research_sse?company_name=${encodeURIComponent(companyName)}`, {
-      withCredentials: true,
-    })
+  //   const eventSource = new EventSource(`/api/company_research_sse?company_name=${encodeURIComponent(companyName)}`, {
+  //     withCredentials: true,
+  //   })
 
-    eventSource.onmessage = (event) => {
-      setInsights((prev) => [...prev, event.data])
-    }
+  //   eventSource.onmessage = (event) => {
+  //     setInsights((prev) => [...prev, event.data])
+  //   }
 
-    eventSource.onerror = (error) => {
-      console.error("SSE error", error)
-      eventSource.close()
-      setLoading(false)
-    }
+  //   eventSource.onerror = (error) => {
+  //     console.error("SSE error", error)
+  //     eventSource.close()
+  //     setLoading(false)
+  //   }
 
-    eventSource.onopen = () => {
-      console.log("SSE connection opened")
-    }
+  //   eventSource.onopen = () => {
+  //     console.log("SSE connection opened")
+  //   }
 
-    eventSource.addEventListener("end", () => {
-      eventSource.close()
-      setLoading(false)
-    })
-  }
+  //   eventSource.addEventListener("end", () => {
+  //     eventSource.close() 
+  //     setLoading(false)
+  //   })
+  // }
 
   return (
     <Container maxW="full">
-      <Box pt={12} m={4}>
-        <Text fontSize="2xl" truncate maxW="sm">
-          Hi, {currentUser?.full_name || currentUser?.email} 👋🏼
-        </Text>
-        <Text>Welcome back, nice to see you again!</Text>
-      </Box>
-
-      <VStack gap={4} alignItems="stretch" margin={4}>
-        <Input
-          placeholder="Enter company name"
-          value={companyName}
-          onChange={(e) => setCompanyName(e.target.value)}
-        />
-        <Button onClick={handleStartResearch} disabled={!companyName || loading}>
-          {loading ? <Spinner size="sm" /> : "Start Research"}
-        </Button>
-
-        {insights.length > 0 && (
-          <Box>
-            <Text fontWeight="bold">Streaming Insights:</Text>
-            {insights.map((line, idx) => (
-              <Code key={idx} display="block" p={2} whiteSpace="pre-wrap">
-                {line}
-              </Code>
-            ))}
-          </Box>
-        )}
-      </VStack>
+      {/* Render the CompanyResearchPage component */}
+      <CompanyResearchPage />
     </Container>
   )
 }
-
