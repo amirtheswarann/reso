@@ -40,6 +40,7 @@ const CompanyResearchPage = () => {
     onStatus: setStatus,
     onDone: () => setLoading(false),
     onError: (errMsg) => {
+      // TODO: Handle error
       setStatus(errMsg);
       setTimeout(() => setLoading(false), 2000);
     },

@@ -57,3 +57,10 @@ COMPANY_INFO_EXTRACTION_SCHEMA = {
     ],
     "description": "Company information",
 }
+
+NODE_DISPLAY_NAMES = {
+    "generate_queries": "Generating Search Queries",
+    "research_company": "Searching Online for Information",
+    "gather_notes_extract_schema": "Structuring Research Data",
+    "reflection": "Analyzing Research Quality Standard",
+}

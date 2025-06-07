@@ -121,7 +121,8 @@ class CompanyResearch(SQLModel):
 
 class AStreamStatus(SQLModel):
     type: str
-    data: str
+    data: dict | str
+
 
 class AStreamResult(AStreamStatus):
     insight: str
