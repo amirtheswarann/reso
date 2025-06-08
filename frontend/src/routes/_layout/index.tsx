@@ -1,8 +1,4 @@
-
-import {
-  Container,
-
-} from "@chakra-ui/react"
+import { Container } from "@chakra-ui/react"
 import { createFileRoute } from "@tanstack/react-router"
 
 import CompanyResearchPage from "@/components/researchAgent/companyResearchPage" // Import the component
@@ -12,7 +8,7 @@ export const Route = createFileRoute("/_layout/")({
 })
 
 function CompanyResearch() {
-// Removed unused state since CompanyResearchPage handles its own state management
+  // Removed unused state since CompanyResearchPage handles its own state management
   // const [loading, setLoading] = useState(false) // This state seems unused if CompanyResearchPage handles its own loading
 
   // The following SSE logic might be redundant if CompanyResearchPage handles its own API calls and SSE.
@@ -43,7 +39,7 @@ function CompanyResearch() {
   //   }
 
   //   eventSource.addEventListener("end", () => {
-  //     eventSource.close() 
+  //     eventSource.close()
   //     setLoading(false)
   //   })
   // }

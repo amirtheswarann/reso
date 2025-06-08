@@ -1,27 +1,35 @@
-import { Box, Flex, Icon, Text } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
-import { Link as RouterLink } from "@tanstack/react-router";
-import { FiBriefcase, FiHome, FiSettings, FiClock } from "react-icons/fi";
-import type { IconType } from "react-icons/lib";
-import useAuth from "@/hooks/useAuth";
-import { CompanyResearchService, CompanyResearchHistoryResponse } from "@/client";
+import {
+  type CompanyResearchHistoryResponse,
+  CompanyResearchService,
+} from "@/client"
+import useAuth from "@/hooks/useAuth"
+import { Box, Flex, Icon, Text } from "@chakra-ui/react"
+import { useQuery } from "@tanstack/react-query"
+import { Link as RouterLink } from "@tanstack/react-router"
+import { FiBriefcase, FiClock, FiHome, FiSettings } from "react-icons/fi"
+import type { IconType } from "react-icons/lib"
 
 // Define the static menu items
 const staticItems = [
-  { icon: FiHome, title: "Dashboard", path: "/" , key: "dashboard"},
+  { icon: FiHome, title: "Dashboard", path: "/", key: "dashboard" },
   { icon: FiBriefcase, title: "Items", path: "/items", key: "items" },
-  { icon: FiSettings, title: "User Settings", path: "/settings", key: "settings" },
-];
+  {
+    icon: FiSettings,
+    title: "User Settings",
+    path: "/settings",
+    key: "settings",
+  },
+]
 
 interface SidebarItemsProps {
-  onClose?: () => void;
+  onClose?: () => void
 }
 
 interface Item {
-  icon: IconType;
-  title: string;
-  path: string;
-  key: string;
+  icon: IconType
+  title: string
+  path: string
+  key: string
 }
 
 function getUserHistoryQueryOptions(currentUser: any) {
@@ -29,25 +37,26 @@ function getUserHistoryQueryOptions(currentUser: any) {
     queryKey: ["userHistory", currentUser?.id],
     queryFn: () => CompanyResearchService.getUserHistory(),
     enabled: !!currentUser?.id,
-  };
+  }
 }
 
 const HistoryItems = ({ onClose }: SidebarItemsProps) => {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser } = useAuth()
 
   // FIX #1: Correctly destructure `data` and rename it to `historyData`.
   const { data: historyData, isLoading } = useQuery(
-    getUserHistoryQueryOptions(currentUser)
-  );
+    getUserHistoryQueryOptions(currentUser),
+  )
 
-  const dynamicHistoryItems: Item[] = historyData?.map((historyItem: CompanyResearchHistoryResponse) => ({
-    icon: FiClock,
-    title: historyItem.company_name,
-    path: `/h/${historyItem.id}`,
-    key: historyItem.id,
-  })) || []; // Default to an empty array
+  const dynamicHistoryItems: Item[] =
+    historyData?.map((historyItem: CompanyResearchHistoryResponse) => ({
+      icon: FiClock,
+      title: historyItem.company_name,
+      path: `/h/${historyItem.id}`,
+      key: historyItem.id,
+    })) || [] // Default to an empty array
 
-  const finalItems: Item[] = [...staticItems, ...dynamicHistoryItems];
+  const finalItems: Item[] = [...staticItems, ...dynamicHistoryItems]
 
   const listItems = finalItems.map(({ icon, title, path, key }) => (
     <RouterLink key={key} to={path} onClick={onClose}>
@@ -65,7 +74,7 @@ const HistoryItems = ({ onClose }: SidebarItemsProps) => {
         <Text ml={2}>{title}</Text>
       </Flex>
     </RouterLink>
-  ));
+  ))
 
   return (
     <>
@@ -74,7 +83,7 @@ const HistoryItems = ({ onClose }: SidebarItemsProps) => {
       </Text>
       <Box>{listItems}</Box>
     </>
-  );
-};
+  )
+}
 
-export default HistoryItems;
+export default HistoryItems

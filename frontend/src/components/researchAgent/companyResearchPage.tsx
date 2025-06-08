@@ -1,83 +1,77 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  VStack,
-  Text,
-} from '@chakra-ui/react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import DraggableComponent from './DraggableComponent';
-import { DroppableArea } from './DroppableArea';
-import LoadingOverlay from './companyResearchLoadingOverlay.tsx';
-import { useCompanyResearchMutation } from '@/hooks/useCompanyResearch';
+import { useCompanyResearchMutation } from "@/hooks/useCompanyResearch"
+import { Box, Button, Flex, Input, Text, VStack } from "@chakra-ui/react"
+import React, { useState } from "react"
+import { DndProvider } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
+import DraggableComponent from "./DraggableComponent"
+import { DroppableArea } from "./DroppableArea"
+import LoadingOverlay from "./companyResearchLoadingOverlay.tsx"
 
 export const ItemTypes = {
-  COMPONENT: 'component',
-};
+  COMPONENT: "component",
+}
 
 export interface DraggableInternalItem {
-  id: string;
-  index: number;
-  type: string;
+  id: string
+  index: number
+  type: string
 }
 
 export interface DraggableNewItem {
-  id: string;
-  name: string;
-  type: string;
+  id: string
+  name: string
+  type: string
 }
 
 const CompanyResearchPage = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [droppedItems, setDroppedItems] = useState<{ id: string; name: string }[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('Starting research...');
+  const [searchTerm, setSearchTerm] = useState("")
+  const [droppedItems, setDroppedItems] = useState<
+    { id: string; name: string }[]
+  >([])
+  const [loading, setLoading] = useState(false)
+  const [status, setStatus] = useState("Starting research...")
 
   const researchMutation = useCompanyResearchMutation({
     onStatus: setStatus,
     onDone: () => setLoading(false),
     onError: (errMsg) => {
       // TODO: Handle error
-      setStatus(errMsg);
-      setTimeout(() => setLoading(false), 2000);
+      setStatus(errMsg)
+      setTimeout(() => setLoading(false), 2000)
     },
-  });
+  })
 
   // Map draggable component IDs to backend insight keys
   const insightIdMap: Record<string, string> = {
-    company_info: 'company_info',
-    swot_analysis: 'swot_analysis',
-    competitor_analysis: 'competitor_analysis',
-  };
-  
-  
-  const handleResearch = () => {
-    if (!searchTerm || droppedItems.length === 0) return;
+    company_info: "company_info",
+    swot_analysis: "swot_analysis",
+    competitor_analysis: "competitor_analysis",
+  }
 
-    setLoading(true);
-    setStatus("Initializing research...");
+  const handleResearch = () => {
+    if (!searchTerm || droppedItems.length === 0) return
+
+    setLoading(true)
+    setStatus("Initializing research...")
 
     // Convert dropped items IDs to insights requested by backend
     const insightsRequested = droppedItems
-      .map(item => insightIdMap[item.id])
-      .filter(Boolean);
-    console.log("data");
-    console.log(insightsRequested);
+      .map((item) => insightIdMap[item.id])
+      .filter(Boolean)
+    console.log("data")
+    console.log(insightsRequested)
 
     researchMutation.mutate({
       companyName: searchTerm,
       insightsRequested,
-    });
-  };
+    })
+  }
 
   const handleCancel = () => {
     // TODO: Add actual cancellation if supported by SSE client
-    setStatus("Cancelled by user.");
-    setTimeout(() => setLoading(false), 1000);
-  };
+    setStatus("Cancelled by user.")
+    setTimeout(() => setLoading(false), 1000)
+  }
 
   return (
     <>
@@ -99,7 +93,10 @@ const CompanyResearchPage = () => {
               >
                 Research
               </Button>
-              <DroppableArea droppedItems={droppedItems} setDroppedItems={setDroppedItems} />
+              <DroppableArea
+                droppedItems={droppedItems}
+                setDroppedItems={setDroppedItems}
+              />
             </VStack>
           </Box>
 
@@ -126,7 +123,7 @@ const CompanyResearchPage = () => {
         </Flex>
       </DndProvider>
     </>
-  );
-};
+  )
+}
 
-export default CompanyResearchPage;
+export default CompanyResearchPage

@@ -1,12 +1,12 @@
-import { Box, Button, Spinner, Text, VStack } from "@chakra-ui/react";
-import React from "react";
+import { Box, Button, Spinner, Text, VStack } from "@chakra-ui/react"
+import React from "react"
 
 const LoadingOverlay = ({
   status,
   onCancel,
 }: {
-  status: string;
-  onCancel: () => void;
+  status: string
+  onCancel: () => void
 }) => {
   return (
     <Box
@@ -31,7 +31,7 @@ const LoadingOverlay = ({
         </Button>
       </VStack>
     </Box>
-  );
-};
+  )
+}
 
-export default LoadingOverlay;
+export default LoadingOverlay

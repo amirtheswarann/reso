@@ -1,51 +1,64 @@
-import { VStack, Text, Box } from '@chakra-ui/react';
-import React, { useCallback } from 'react';
-import { useDrop } from 'react-dnd';
-import { DraggableNewItem, DraggableInternalItem, ItemTypes } from './companyResearchPage';
-import { DroppedItem } from './DroppedItem';
+import { Box, Text, VStack } from "@chakra-ui/react"
+import type React from "react"
+import { useCallback } from "react"
+import { useDrop } from "react-dnd"
+import { DroppedItem } from "./DroppedItem"
+import {
+  type DraggableInternalItem,
+  type DraggableNewItem,
+  ItemTypes,
+} from "./companyResearchPage"
 
 export const DroppableArea = ({
-  droppedItems, setDroppedItems,
+  droppedItems,
+  setDroppedItems,
 }: {
-  droppedItems: { id: string; name: string; }[];
-  setDroppedItems: React.Dispatch<React.SetStateAction<{ id: string; name: string; }[]>>;
+  droppedItems: { id: string; name: string }[]
+  setDroppedItems: React.Dispatch<
+    React.SetStateAction<{ id: string; name: string }[]>
+  >
 }) => {
   const [{ isOver, canDrop }, drop] = useDrop<
-  DraggableNewItem | DraggableInternalItem,
-  void,
-  { isOver: boolean; canDrop: boolean }
->(() => ({
-  accept: ItemTypes.COMPONENT,
-  drop: (item, monitor) => {
-    const didDropOnChild = monitor.didDrop();
-    if (didDropOnChild) return;
+    DraggableNewItem | DraggableInternalItem,
+    void,
+    { isOver: boolean; canDrop: boolean }
+  >(
+    () => ({
+      accept: ItemTypes.COMPONENT,
+      drop: (item, monitor) => {
+        const didDropOnChild = monitor.didDrop()
+        if (didDropOnChild) return
 
-    if ('name' in item && item.id && item.name) {
-      setDroppedItems((prev) => {
-        if (prev.some((d) => d.id === item.id)) return prev;
-        return [...prev, { id: item.id, name: item.name }];
-      });
-    }
-  },
-  collect: (monitor) => ({
-    isOver: monitor.isOver({ shallow: true }),
-    canDrop: monitor.canDrop(),
-  }),
-}), [droppedItems]);
+        if ("name" in item && item.id && item.name) {
+          setDroppedItems((prev) => {
+            if (prev.some((d) => d.id === item.id)) return prev
+            return [...prev, { id: item.id, name: item.name }]
+          })
+        }
+      },
+      collect: (monitor) => ({
+        isOver: monitor.isOver({ shallow: true }),
+        canDrop: monitor.canDrop(),
+      }),
+    }),
+    [droppedItems],
+  )
 
-
-  const moveItem = useCallback((dragIndex: number, hoverIndex: number) => {
-    setDroppedItems((prevItems) => {
-      const updated = [...prevItems];
-      const [removed] = updated.splice(dragIndex, 1);
-      updated.splice(hoverIndex, 0, removed);
-      return updated;
-    });
-  }, [setDroppedItems]);
+  const moveItem = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      setDroppedItems((prevItems) => {
+        const updated = [...prevItems]
+        const [removed] = updated.splice(dragIndex, 1)
+        updated.splice(hoverIndex, 0, removed)
+        return updated
+      })
+    },
+    [setDroppedItems],
+  )
 
   const removeItem = (id: string) => {
-    setDroppedItems((items) => items.filter((item) => item.id !== id));
-  };
+    setDroppedItems((items) => items.filter((item) => item.id !== id))
+  }
 
   return (
     <VStack
@@ -54,8 +67,8 @@ export const DroppableArea = ({
       mt={4}
       minH="200px"
       border="2px dashed"
-      borderColor={isOver && canDrop ? 'green.400' : 'gray.300'}
-      bg={isOver ? 'green.50' : 'white'}
+      borderColor={isOver && canDrop ? "green.400" : "gray.300"}
+      bg={isOver ? "green.50" : "white"}
       rounded="md"
       gap={2}
       align="stretch"
@@ -77,5 +90,5 @@ export const DroppableArea = ({
         ))
       )}
     </VStack>
-  );
-};
+  )
+}

@@ -14,9 +14,8 @@ import {
   DrawerRoot,
   DrawerTrigger,
 } from "../ui/drawer"
-import SidebarItems from "./SidebarItems"
 import HistoryItems from "./HistoryItems"
-
+import SidebarItems from "./SidebarItems"
 
 const Sidebar = () => {
   const queryClient = useQueryClient()
