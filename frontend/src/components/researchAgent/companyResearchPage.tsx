@@ -1,11 +1,14 @@
+import useAuth from "@/hooks/useAuth"
 import { useCompanyResearchMutation } from "@/hooks/useCompanyResearch"
 import { Box, Button, Flex, Input, Text, VStack } from "@chakra-ui/react"
-import React, { useState } from "react"
+import { useQueryClient } from "@tanstack/react-query"
+import { useNavigate } from "@tanstack/react-router"
+import { useState } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
-import DraggableComponent from "./DraggableComponent"
-import { DroppableArea } from "./DroppableArea"
-import LoadingOverlay from "./companyResearchLoadingOverlay.tsx"
+import { DroppableArea } from "./researchComponet/DroppableArea.tsx"
+import LoadingOverlay from "./researchComponet/companyResearchLoadingOverlay.tsx"
+import DraggableComponent from "./researchComponet/draggableComponent.tsx"
 
 export const ItemTypes = {
   COMPONENT: "component",
@@ -24,24 +27,33 @@ export interface DraggableNewItem {
 }
 
 const CompanyResearchPage = () => {
+  const { user: currentUser } = useAuth()
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState("")
   const [droppedItems, setDroppedItems] = useState<
     { id: string; name: string }[]
   >([])
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState("Starting research...")
-
   const researchMutation = useCompanyResearchMutation({
     onStatus: setStatus,
-    onDone: () => setLoading(false),
+    onDone: () => {
+      setLoading(false)
+    },
     onError: (errMsg) => {
       // TODO: Handle error
       setStatus(errMsg)
       setTimeout(() => setLoading(false), 2000)
     },
+    redirect: (id) => {
+      queryClient.invalidateQueries({
+        queryKey: ["userHistory", currentUser?.id],
+      })
+      navigate({ to: `/h/${id}` })
+    },
   })
 
-  // Map draggable component IDs to backend insight keys
   const insightIdMap: Record<string, string> = {
     company_info: "company_info",
     swot_analysis: "swot_analysis",
@@ -54,7 +66,6 @@ const CompanyResearchPage = () => {
     setLoading(true)
     setStatus("Initializing research...")
 
-    // Convert dropped items IDs to insights requested by backend
     const insightsRequested = droppedItems
       .map((item) => insightIdMap[item.id])
       .filter(Boolean)
@@ -68,7 +79,7 @@ const CompanyResearchPage = () => {
   }
 
   const handleCancel = () => {
-    // TODO: Add actual cancellation if supported by SSE client
+    // TODO: Add manual cancelation
     setStatus("Cancelled by user.")
     setTimeout(() => setLoading(false), 1000)
   }

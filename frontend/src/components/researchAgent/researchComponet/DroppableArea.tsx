@@ -1,13 +1,13 @@
-import { Box, Text, VStack } from "@chakra-ui/react"
+import { Text, VStack } from "@chakra-ui/react"
 import type React from "react"
 import { useCallback } from "react"
 import { useDrop } from "react-dnd"
-import { DroppedItem } from "./DroppedItem"
 import {
+  ItemTypes,
   type DraggableInternalItem,
   type DraggableNewItem,
-  ItemTypes,
-} from "./companyResearchPage"
+} from "../companyResearchPage"
+import { DroppedItem } from "./DroppedItem"
 
 export const DroppableArea = ({
   droppedItems,

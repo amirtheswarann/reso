@@ -1,6 +1,6 @@
 import {
-  type CompanyResearchHistoryResponse,
   CompanyResearchService,
+  type CompanyResearchHistoryResponse,
 } from "@/client"
 import useAuth from "@/hooks/useAuth"
 import { Box, Flex, Icon, Text } from "@chakra-ui/react"
@@ -43,7 +43,6 @@ function getUserHistoryQueryOptions(currentUser: any) {
 const HistoryItems = ({ onClose }: SidebarItemsProps) => {
   const { user: currentUser } = useAuth()
 
-  // FIX #1: Correctly destructure `data` and rename it to `historyData`.
   const { data: historyData, isLoading } = useQuery(
     getUserHistoryQueryOptions(currentUser),
   )

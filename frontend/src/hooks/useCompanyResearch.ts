@@ -12,10 +12,12 @@ export const useCompanyResearchMutation = ({
   onStatus,
   onDone,
   onError,
+  redirect,
 }: {
   onStatus: (status: any) => void
   onDone: () => void
   onError: (error: string) => void
+  redirect: (id: string) => void
 }) => {
   return useMutation<void, Error, MutationVariables>({
     mutationKey: ["companyResearch"],
@@ -61,8 +63,8 @@ export const useCompanyResearchMutation = ({
               onStatus(event.data)
               console.log("Stream closed by server.", event.data)
             } else if (event.event === "success") {
+              redirect(event.data)
               console.log("Stream closed by server.", event.data)
-              onStatus(event.data) // Final result
             } else if (event.event === "done") {
               console.log("Stream is done")
               onDone()

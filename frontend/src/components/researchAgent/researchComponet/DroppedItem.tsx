@@ -2,7 +2,7 @@ import { Flex, IconButton, Text } from "@chakra-ui/react"
 import React, { useRef } from "react"
 import { useDrag, useDrop } from "react-dnd"
 import { AiOutlineClose } from "react-icons/ai"
-import { type DraggableInternalItem, ItemTypes } from "./companyResearchPage"
+import { ItemTypes, type DraggableInternalItem } from "../companyResearchPage"
 
 export const DroppedItem = ({
   id,

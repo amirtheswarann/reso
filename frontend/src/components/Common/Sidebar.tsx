@@ -15,7 +15,7 @@ import {
   DrawerTrigger,
 } from "../ui/drawer"
 import HistoryItems from "./HistoryItems"
-import SidebarItems from "./SidebarItems"
+
 
 const Sidebar = () => {
   const queryClient = useQueryClient()
@@ -50,7 +50,6 @@ const Sidebar = () => {
           <DrawerBody>
             <Flex flexDir="column" justify="space-between">
               <Box>
-                <SidebarItems onClose={() => setOpen(false)} />
                 <HistoryItems onClose={() => setOpen(false)} />
                 <Flex
                   as="button"
@@ -89,7 +88,6 @@ const Sidebar = () => {
         p={4}
       >
         <Box w="100%">
-          <SidebarItems />
           <HistoryItems />
         </Box>
       </Box>
