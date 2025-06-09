@@ -1,11 +1,9 @@
 import uuid
-from pydantic import EmailStr
-from sqlmodel import Field, Relationship, SQLModel
-from datetime import datetime, timezone
+from pydantic import EmailStr, field_serializer
+from sqlmodel import Field, Relationship, SQLModel, DateTime
+from datetime import datetime
 from typing import Optional, List
 from sqlalchemy import JSON, Column
-
-
 
 # Shared properties
 class UserBase(SQLModel):
@@ -164,7 +162,11 @@ class CompanyResearchResult(SQLModel):
 class CompanyResearchHistoryBase(SQLModel):
     company_name: str = Field(min_length=1, max_length=255)
     result: Optional[CompanyResearchResult] = Field(default=None, sa_column=Column(JSON))
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(), sa_column=Column(DateTime(timezone=True),nullable=False))
+
+    @field_serializer("created_at")
+    def serialize_created_at(self, value: datetime):
+        return value.astimezone().isoformat()
 
 class CompanyResearchHistory(CompanyResearchHistoryBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
