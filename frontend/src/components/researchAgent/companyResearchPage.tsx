@@ -1,6 +1,7 @@
 import { useColorModeValue } from "@/components/ui/color-mode"
 import useAuth from "@/hooks/useAuth"
 import { useCompanyResearchMutation } from "@/hooks/useCompanyResearch"
+import useCustomToast from "@/hooks/useCustomToast"
 import {
   Box,
   Button,
@@ -37,6 +38,7 @@ export interface DraggableNewItem {
 }
 
 const CompanyResearchPage = () => {
+  const { showErrorToast } = useCustomToast()
   const { user: currentUser } = useAuth()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -52,8 +54,8 @@ const CompanyResearchPage = () => {
     onStatus: setStatus,
     onDone: () => setLoading(false),
     onError: (errMsg) => {
-      setStatus(errMsg)
-      setTimeout(() => setLoading(false), 2000)
+      setLoading(false)
+      showErrorToast(errMsg)
     },
     redirect: (id) => {
       queryClient.invalidateQueries({

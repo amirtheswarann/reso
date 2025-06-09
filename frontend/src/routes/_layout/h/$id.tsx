@@ -8,6 +8,8 @@ import { companyInfoRenderer } from "@/components/researchAgent/researchComponet
 import { competitorAnalysisRenderer } from "@/components/researchAgent/researchComponet/CompetitorAnalysisDisplay"
 import { swotAnalysisRenderer } from "@/components/researchAgent/researchComponet/SWOTAnalysisDisplay"
 import { useColorModeValue } from "@/components/ui/color-mode"
+import useCustomToast from "@/hooks/useCustomToast"
+import { useNavigate } from "@tanstack/react-router"
 import {
   Box,
   Container,
@@ -26,7 +28,8 @@ export const Route = createFileRoute("/_layout/h/$id")({
 function CompanyResearchPage() {
   const { id } = Route.useParams()
   const reportRef = useRef(null)
-
+  const navigate = useNavigate()
+  const { showErrorToast } = useCustomToast()
   const { data, error, isLoading } = useQuery({
     queryKey: ["companyResearch", id],
     queryFn: () => CompanyResearchService.getUserHistoryItem({ historyId: id }),
@@ -37,7 +40,11 @@ function CompanyResearchPage() {
   const borderColor = useColorModeValue("gray.200", "gray.700")
 
   if (isLoading) return <Text textAlign="center">Loading...</Text>
-  if (error) return <Text textAlign="center">Error loading report.</Text>
+  if (error) {
+    showErrorToast("Error loading data. Please try again. ")
+    navigate({ to: "/" })
+    return <Text textAlign="center">Error loading data.</Text>
+  }
   if (!data) return <Text textAlign="center">No data available.</Text>
 
   const { result } = data
