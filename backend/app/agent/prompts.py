@@ -34,7 +34,7 @@ Your query should:
 
 Create a focused query that will maximize the chances of finding schema-relevant information."""
 
-INFO_PROMPT = """You are doing web research on a company, {company}. 
+INFO_PROMPT = """You are doing web research on a company, {company}.
 
 The following schema shows the type of information we're interested in:
 

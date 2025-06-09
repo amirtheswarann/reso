@@ -1,9 +1,10 @@
 import uuid
-from pydantic import EmailStr, field_serializer
-from sqlmodel import Field, Relationship, SQLModel, DateTime
 from datetime import datetime
-from typing import Optional, List
+
+from pydantic import EmailStr, field_serializer
 from sqlalchemy import JSON, Column
+from sqlmodel import DateTime, Field, Relationship, SQLModel
+
 
 # Shared properties
 class UserBase(SQLModel):
@@ -84,21 +85,21 @@ class NewPassword(SQLModel):
     new_password: str = Field(min_length=8, max_length=40)
 
 class SWOTAnalysis(SQLModel):
-    strengths: List[str] = Field(description="Internal advantages that give the company a competitive edge.")
-    weaknesses: List[str] = Field(description="Internal limitations or challenges faced by the company.")
-    opportunities: List[str] = Field(description="External trends or areas the company can leverage for growth.")
-    threats: List[str] = Field(description="External risks or challenges that could impact the company negatively.")
+    strengths: list[str] = Field(description="Internal advantages that give the company a competitive edge.")
+    weaknesses: list[str] = Field(description="Internal limitations or challenges faced by the company.")
+    opportunities: list[str] = Field(description="External trends or areas the company can leverage for growth.")
+    threats: list[str] = Field(description="External risks or challenges that could impact the company negatively.")
 
 class CompetitorAnalysis(SQLModel):
-    competitors: List[str] = Field(description="Direct or emerging competitors in the same market space.")
+    competitors: list[str] = Field(description="Direct or emerging competitors in the same market space.")
     description: str = Field(description="Concise comparative summary highlighting market positioning, strategic differences, or innovation.")
 
 class CompanyInfo(SQLModel):
     company_name: str = Field(..., description="Official name of the company")
-    founding_year: Optional[int] = Field(None, description="Year the company was founded")
-    founder_names: Optional[List[str]] = Field(None, description="Names of the founding team members")
-    product_description: Optional[str] = Field(None, description="Brief description of the company's main product or service")
-    funding_summary: Optional[str] = Field(None, description="Summary of the company's funding history")
+    founding_year: int | None = Field(None, description="Year the company was founded")
+    founder_names: list[str] | None = Field(None, description="Names of the founding team members")
+    product_description: str | None = Field(None, description="Brief description of the company's main product or service")
+    funding_summary: str | None = Field(None, description="Summary of the company's funding history")
 
 class CompanyResearch(SQLModel):
     company: str
@@ -117,13 +118,13 @@ class CompanyResearchHistoryResponse(SQLModel):
     created_at: datetime
 
 class CompanyResearchResult(SQLModel):
-    company_info: Optional[CompanyInfo] = None
-    swot_analysis: Optional[SWOTAnalysis] = None
-    competitor_analysis: Optional[CompetitorAnalysis] = None
+    company_info: CompanyInfo | None = None
+    swot_analysis: SWOTAnalysis | None = None
+    competitor_analysis: CompetitorAnalysis | None = None
 
 class CompanyResearchHistoryBase(SQLModel):
     company_name: str = Field(min_length=1, max_length=255)
-    result: Optional[CompanyResearchResult] = Field(default=None, sa_column=Column(JSON))
+    result: CompanyResearchResult | None = Field(default=None, sa_column=Column(JSON))
     created_at: datetime = Field(default_factory=lambda: datetime.now(), sa_column=Column(DateTime(timezone=True),nullable=False))
 
     @field_serializer("created_at")

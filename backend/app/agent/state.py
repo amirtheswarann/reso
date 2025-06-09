@@ -1,7 +1,6 @@
-from dataclasses import dataclass, field
-from typing import Any, Optional, Annotated
 import operator
-
+from dataclasses import dataclass, field
+from typing import Annotated, Any
 
 DEFAULT_EXTRACTION_SCHEMA = {
     "title": "CompanyInfo",
@@ -46,7 +45,7 @@ class InputState:
     )
     "The json schema defines the information the agent is tasked with filling out."
 
-    user_notes: Optional[dict[str, Any]] = field(default=None)
+    user_notes: dict[str, Any] | None = field(default=None)
     "Any notes from the user to start the research process."
 
 

@@ -1,19 +1,29 @@
-from app.core import config
+import logging
+from collections.abc import AsyncGenerator
+from typing import Any
+
+from aiostream import stream
 from fastapi import APIRouter, HTTPException
 from sse_starlette import EventSourceResponse, ServerSentEvent
-from typing import AsyncGenerator, Any
-import logging
-import json
-from aiostream import stream
+
+from app.agent.graph import graph as company_research_graph
+from app.agent.helper import COMPANY_INFO_EXTRACTION_SCHEMA, NODE_DISPLAY_NAMES
 
 # --- Application-specific imports ---
 # (Assuming these paths are correct for your project structure)
 from app.api.deps import CurrentUser, SessionDep
-from app.models import CompanyResearchRequest, AStreamStatus, AStreamResult, CompanyResearchHistory
-from app.agent.graph import graph as company_research_graph
-from app.agent.helper import COMPANY_INFO_EXTRACTION_SCHEMA, NODE_DISPLAY_NAMES
-from app.gemini_agent.agent import run_swot_analysis, run_competitor_analysis, run_company_info_extraction
-
+from app.core import config
+from app.gemini_agent.agent import (
+    run_company_info_extraction,
+    run_competitor_analysis,
+    run_swot_analysis,
+)
+from app.models import (
+    AStreamResult,
+    AStreamStatus,
+    CompanyResearchHistory,
+    CompanyResearchRequest,
+)
 
 # --- Setup ---
 router = APIRouter(prefix="/company_research", tags=["agents"])
@@ -95,7 +105,7 @@ async def stream_company_research(
         async for step in streamer:
             if step.type == "status":
                 yield ServerSentEvent(data=step.data, event="status_update")
-            
+
             elif step.type == "output":
                 company_research_data[step.insight] = step.data
 

@@ -1,15 +1,18 @@
-from os import name
 from uuid import UUID
-from fastapi import APIRouter, Depends
+
+from fastapi import APIRouter
 from sqlmodel import select
-from typing import List
 
 from app.api.deps import CurrentUser, SessionDep
-from app.models import CompanyResearchHistory, CompanyResearchHistoryResponse, CompanyResearchHistoryBase
+from app.models import (
+    CompanyResearchHistory,
+    CompanyResearchHistoryBase,
+    CompanyResearchHistoryResponse,
+)
 
 router = APIRouter(prefix="/history", tags=["company_research"])
 
-@router.get("/", response_model=List[CompanyResearchHistoryResponse])
+@router.get("/", response_model=list[CompanyResearchHistoryResponse])
 def get_user_history(
     session: SessionDep,
     current_user: CurrentUser,

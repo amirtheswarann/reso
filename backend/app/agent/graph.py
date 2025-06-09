@@ -1,25 +1,26 @@
 import asyncio
-from typing import cast, Any, Literal
 import json
-import os # Added for environment variable access if needed, though wrapper handles it
+import os  # Added for environment variable access if needed, though wrapper handles it
+from typing import Any, Literal, cast
 
 from langchain_community.utilities.google_serper import GoogleSerperAPIWrapper
+
 #from langchain_anthropic import ChatAnthropic # Assuming langc is a typo and should be langchain_anthropic
 from langchain_core.rate_limiters import InMemoryRateLimiter
 from langchain_core.runnables import RunnableConfig
-from langgraph.graph import START, END, StateGraph
-from pydantic import BaseModel, Field
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langgraph.graph import END, START, StateGraph
+from pydantic import BaseModel, Field
 
 from app.agent.configuration import Configuration
-from app.agent.state import InputState, OutputState, OverallState
-from app.agent.utils import deduplicate_sources, format_sources, format_all_notes
 from app.agent.prompts import (
     EXTRACTION_PROMPT,
-    REFLECTION_PROMPT,
     INFO_PROMPT,
     QUERY_WRITER_PROMPT,
+    REFLECTION_PROMPT,
 )
+from app.agent.state import InputState, OutputState, OverallState
+from app.agent.utils import deduplicate_sources, format_all_notes, format_sources
 
 # LLMs
 
@@ -102,7 +103,7 @@ async def research_company(
     # Get configuration
     configurable = Configuration.from_runnable_config(config)
     max_search_results = configurable.max_search_results
-    
+
     # Initialize Serper client
     # SERPER_API_KEY environment variable must be set.
     # You can pass serper_api_key=os.getenv("SERPER_API_KEY") if explicit control is needed.
@@ -142,12 +143,12 @@ async def research_company(
         docs_for_formatting.append({
             "url": doc.get("url"),
             "raw_content": doc.get("snippet"), # Using snippet as raw_content
-            "title": doc.get("title") 
+            "title": doc.get("title")
         })
 
     source_str = format_sources(
-        docs_for_formatting, 
-        max_tokens_per_source=1000, 
+        docs_for_formatting,
+        max_tokens_per_source=1000,
         include_raw_content=True # This now means include snippet in the formatted string
     )
 
@@ -164,7 +165,7 @@ async def research_company(
     }
     if configurable.include_search_results:
         # Store the processed and deduplicated search results (title, link, snippet)
-        state_update["search_results"] = docs_for_formatting 
+        state_update["search_results"] = docs_for_formatting
 
     return state_update
 
