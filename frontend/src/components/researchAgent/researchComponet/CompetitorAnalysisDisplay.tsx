@@ -1,5 +1,5 @@
 import { type CompetitorAnalysis } from "@/client"
-import { renderList } from "@/components/researchAgent/researchComponet/commonutils"
+import { renderList } from "@/components/ui/list"
 import { Box, Heading, Text } from "@chakra-ui/react"
 
 export function competitorAnalysisRenderer(

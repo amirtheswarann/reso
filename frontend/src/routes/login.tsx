@@ -1,28 +1,37 @@
-import { Container, Image, Input, Text } from "@chakra-ui/react"
+// src/routes/login.tsx
+
+import { useColorModeValue } from "@/components/ui/color-mode"
+import {
+  Container,
+  Flex,
+  Heading,
+  Image,
+  Input,
+  Text,
+  VStack
+} from "@chakra-ui/react"
 import {
   Link as RouterLink,
   createFileRoute,
   redirect,
 } from "@tanstack/react-router"
-import { type SubmitHandler, useForm } from "react-hook-form"
+import { useForm, type SubmitHandler } from "react-hook-form"
 import { FiLock, FiMail } from "react-icons/fi"
 
 import type { Body_login_login_access_token as AccessToken } from "@/client"
 import { Button } from "@/components/ui/button"
 import { Field } from "@/components/ui/field"
 import { InputGroup } from "@/components/ui/input-group"
+import { Logo } from "@/components/ui/logo"
 import { PasswordInput } from "@/components/ui/password-input"
 import useAuth, { isLoggedIn } from "@/hooks/useAuth"
-import Logo from "/assets/images/fastapi-logo.svg"
-import { emailPattern, passwordRules } from "../utils"
+import { emailPattern, passwordRules } from "@/utils"
 
 export const Route = createFileRoute("/login")({
   component: Login,
   beforeLoad: async () => {
     if (isLoggedIn()) {
-      throw redirect({
-        to: "/",
-      })
+      throw redirect({ to: "/" })
     }
   },
 })
@@ -34,82 +43,68 @@ function Login() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<AccessToken>({
+    defaultValues: { username: "", password: "" },
     mode: "onBlur",
-    criteriaMode: "all",
-    defaultValues: {
-      username: "",
-      password: "",
-    },
   })
 
   const onSubmit: SubmitHandler<AccessToken> = async (data) => {
     if (isSubmitting) return
-
     resetError()
-
     try {
       await loginMutation.mutateAsync(data)
-    } catch {
-      // error is handled by useAuth hook
-    }
+    } catch { }
   }
 
   return (
-    <>
-      <Container
-        as="form"
-        onSubmit={handleSubmit(onSubmit)}
-        h="100vh"
-        maxW="sm"
-        alignItems="stretch"
-        justifyContent="center"
-        gap={4}
-        centerContent
-      >
-        <Image
-          src={Logo}
-          alt="FastAPI logo"
-          height="auto"
-          maxW="2xs"
-          alignSelf="center"
-          mb={4}
-        />
-        <Field
-          invalid={!!errors.username}
-          errorText={errors.username?.message || !!error}
-        >
-          <InputGroup w="100%" startElement={<FiMail />}>
-            <Input
-              id="username"
-              {...register("username", {
-                required: "Username is required",
-                pattern: emailPattern,
-              })}
-              placeholder="Email"
-              type="email"
-            />
-          </InputGroup>
-        </Field>
-        <PasswordInput
-          type="password"
-          startElement={<FiLock />}
-          {...register("password", passwordRules())}
-          placeholder="Password"
-          errors={errors}
-        />
-        <RouterLink to="/recover-password" className="main-link">
-          Forgot Password?
-        </RouterLink>
-        <Button variant="solid" type="submit" loading={isSubmitting} size="md">
-          Log In
-        </Button>
-        <Text>
-          Don't have an account?{" "}
-          <RouterLink to="/signup" className="main-link">
-            Sign Up
-          </RouterLink>
-        </Text>
+    <Flex
+      minH="100vh"
+      align="center"
+      justify="center"
+      bg={useColorModeValue("gray.50", "gray.900")}
+      px={4}
+    >
+      <Container maxW="md" p={8} bg="white" borderRadius="md" boxShadow="lg">
+        <VStack gap={6} as="form" onSubmit={handleSubmit(onSubmit)}>
+          <Image src={Logo()} alt="Company Researcher Logo" maxW="150px" />
+          <Heading size="lg" textAlign="center">
+            Welcome Back to Company Researcher
+          </Heading>
+          <Field invalid={!!errors.username} errorText={errors.username?.message || !!error}>
+            <InputGroup w="100%" startElement={<FiMail />}>
+              <Input
+                {...register("username", { required: "Email is required", pattern: emailPattern })}
+                placeholder="Email"
+                type="email"
+              />
+            </InputGroup>
+          </Field>
+          <PasswordInput
+            type="password"
+            startElement={<FiLock />}
+            {...register("password", passwordRules())}
+            placeholder="Password"
+            errors={errors}
+          />
+          <Flex justify="flex-end" w="100%">
+            <RouterLink to="/recover-password" className="main-link">
+              <Text fontSize="sm" color="blue.500">
+                Forgot Password?
+              </Text>
+            </RouterLink>
+          </Flex>
+          <Button type="submit" loading={isSubmitting} size="lg" w="full">
+            Log In
+          </Button>
+          <Text>
+            New here?{" "}
+            <RouterLink to="/signup" className="main-link">
+              <Text as="span" color="blue.500" fontWeight="semibold">
+                Create an account
+              </Text>
+            </RouterLink>
+          </Text>
+        </VStack>
       </Container>
-    </>
+    </Flex>
   )
 }

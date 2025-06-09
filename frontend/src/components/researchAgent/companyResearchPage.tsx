@@ -110,7 +110,7 @@ const CompanyResearchPage = () => {
             flexDirection="column"
             gap={6}
           >
-            <Heading size="lg">Company Research</Heading>
+            <Heading size="lg">Company Researcher</Heading>
             <Group>
               <Input
                 placeholder="Enter a company name"

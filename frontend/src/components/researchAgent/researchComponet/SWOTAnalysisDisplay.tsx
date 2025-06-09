@@ -1,5 +1,5 @@
 import { type SWOTAnalysis } from "@/client"
-import { renderList } from "@/components/researchAgent/researchComponet/commonutils"
+import { renderList } from "@/components/ui/list"
 import { Box, Heading } from "@chakra-ui/react"
 
 export function swotAnalysisRenderer(key: string, swot: SWOTAnalysis) {
