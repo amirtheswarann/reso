@@ -12,6 +12,7 @@ import { FaBars } from "react-icons/fa"
 import { FiLogOut } from "react-icons/fi"
 
 import type { UserPublic } from "@/client"
+import HistoryItems from "@/components/Common/historyItems"
 import useAuth from "@/hooks/useAuth"
 import {
   DrawerBackdrop,
@@ -21,7 +22,6 @@ import {
   DrawerRoot,
   DrawerTrigger,
 } from "../ui/drawer"
-import HistoryItems from "./HistoryItems"
 
 const Sidebar = () => {
   const queryClient = useQueryClient()

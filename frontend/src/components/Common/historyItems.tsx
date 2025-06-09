@@ -36,7 +36,7 @@ function getUserHistoryQueryOptions(currentUser: any) {
 const HistoryItems = ({ onClose }: SidebarItemsProps) => {
   const { user: currentUser } = useAuth()
 
-  const { data: historyData, isLoading } = useQuery(
+  const { data: historyData } = useQuery(
     getUserHistoryQueryOptions(currentUser),
   )
 
