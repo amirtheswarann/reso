@@ -1,14 +1,24 @@
+import { useColorModeValue } from "@/components/ui/color-mode"
 import useAuth from "@/hooks/useAuth"
 import { useCompanyResearchMutation } from "@/hooks/useCompanyResearch"
-import { Box, Button, Flex, Input, Text, VStack } from "@chakra-ui/react"
+import {
+  Box,
+  Button,
+  Flex,
+  Group,
+  Heading,
+  Input,
+  VStack
+} from "@chakra-ui/react"
 import { useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
-import { DroppableArea } from "./researchComponet/DroppableArea.tsx"
-import LoadingOverlay from "./researchComponet/companyResearchLoadingOverlay.tsx"
-import DraggableComponent from "./researchComponet/draggableComponent.tsx"
+import { DroppableArea } from "./researchComponet/DroppableArea"
+import LoadingOverlay from "./researchComponet/companyResearchLoadingOverlay"
+import DraggableComponent from "./researchComponet/draggableComponent"
+
 
 export const ItemTypes = {
   COMPONENT: "component",
@@ -31,18 +41,17 @@ const CompanyResearchPage = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState("")
-  const [droppedItems, setDroppedItems] = useState<
-    { id: string; name: string }[]
-  >([])
+  const [droppedItems, setDroppedItems] = useState<{
+    id: string
+    name: string
+  }[]>([])
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState("Starting research...")
+
   const researchMutation = useCompanyResearchMutation({
     onStatus: setStatus,
-    onDone: () => {
-      setLoading(false)
-    },
+    onDone: () => setLoading(false),
     onError: (errMsg) => {
-      // TODO: Handle error
       setStatus(errMsg)
       setTimeout(() => setLoading(false), 2000)
     },
@@ -69,8 +78,6 @@ const CompanyResearchPage = () => {
     const insightsRequested = droppedItems
       .map((item) => insightIdMap[item.id])
       .filter(Boolean)
-    console.log("data")
-    console.log(insightsRequested)
 
     researchMutation.mutate({
       companyName: searchTerm,
@@ -79,57 +86,87 @@ const CompanyResearchPage = () => {
   }
 
   const handleCancel = () => {
-    // TODO: Add manual cancelation
     setStatus("Cancelled by user.")
     setTimeout(() => setLoading(false), 1000)
   }
+
+  const panelBg = useColorModeValue("white", "gray.800")
+  const inputBg = useColorModeValue("gray.50", "gray.700")
 
   return (
     <>
       {loading && <LoadingOverlay status={status} onCancel={handleCancel} />}
 
       <DndProvider backend={HTML5Backend}>
-        <Flex h="100vh" p={4} gap={4}>
-          <Box flex="2" bg="gray.50" p={4} rounded="md">
-            <VStack align="stretch" gap={4}>
+        <Flex direction={{ base: "column", md: "row" }} h="100vh" p={4} gap={6}>
+          {/* Left Panel: Input & Droppable Area */}
+          <Box
+            flex={{ base: "none", md: 2 }}
+            bg={panelBg}
+            p={6}
+            rounded="2xl"
+            shadow="base"
+            display="flex"
+            flexDirection="column"
+            gap={6}
+          >
+            <Heading size="lg">Company Research</Heading>
+            <Group>
               <Input
-                placeholder="Enter the company name"
+                placeholder="Enter a company name"
+                bg={inputBg}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 disabled={loading}
+                size="lg"
+                rounded="lg"
               />
               <Button
+                colorScheme="teal"
+                size="lg"
                 onClick={handleResearch}
                 disabled={loading || !searchTerm || droppedItems.length === 0}
+                rounded="lg"
               >
                 Research
               </Button>
-              <DroppableArea
-                droppedItems={droppedItems}
-                setDroppedItems={setDroppedItems}
-              />
-            </VStack>
+            </Group>
+            <DroppableArea
+              droppedItems={droppedItems}
+              setDroppedItems={setDroppedItems}
+            />
           </Box>
 
-          <Box flex="1" bg="white" p={4} rounded="md" shadow="md">
-            <Text mb={2} fontWeight="bold">
-              Research insights:
-            </Text>
-            <DraggableComponent
-              id="company_info"
-              name="Company Overview"
-              description="Get detailed information about company funding rounds, valuation, and key business metrics"
-            />
-            <DraggableComponent
-              id="swot_analysis"
-              name="SWOT Analysis"
-              description="Comprehensive analysis of company's Strengths, Weaknesses, Opportunities and Threats"
-            />
-            <DraggableComponent
-              id="competitor_analysis"
-              name="Competitor Analysis"
-              description="In-depth analysis of main competitors, market positioning and competitive advantages"
-            />
+          {/* Right Panel: Insights */}
+          <Box
+            flex={{ base: "none", md: 1 }}
+            bg={panelBg}
+            p={6}
+            rounded="2xl"
+            shadow="base"
+            overflowY="auto"
+            h={{ base: "auto", md: "full" }}
+          >
+            <Heading size="md" mb={4}>
+              Available Insights
+            </Heading>
+            <VStack align="stretch" gap={4}>
+              <DraggableComponent
+                id="company_info"
+                name="Company Overview"
+                description="Details about funding, valuation, and metrics."
+              />
+              <DraggableComponent
+                id="swot_analysis"
+                name="SWOT Analysis"
+                description="Strengths, Weaknesses, Opportunities & Threats."
+              />
+              <DraggableComponent
+                id="competitor_analysis"
+                name="Competitor Analysis"
+                description="Market positioning and competitive edge."
+              />
+            </VStack>
           </Box>
         </Flex>
       </DndProvider>
