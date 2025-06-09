@@ -1,3 +1,4 @@
+import { useColorModeValue } from "@/components/ui/color-mode"
 import { Flex } from "@chakra-ui/react"
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router"
 
@@ -17,12 +18,22 @@ export const Route = createFileRoute("/_layout")({
 })
 
 function Layout() {
+  const bg = useColorModeValue("gray.50", "gray.900")
+
   return (
-    <Flex direction="column" h="100vh">
+    <Flex direction="column" h="100vh" bg={bg}>
       <Navbar />
       <Flex flex="1" overflow="hidden">
         <Sidebar />
-        <Flex flex="1" direction="column" p={4} overflowY="auto">
+        <Flex
+          flex="1"
+          direction="column"
+          p={{ base: 3, md: 6 }}
+          overflowY="auto"
+          bg={useColorModeValue("white", "gray.800")}
+          roundedLeft={{ base: 0, md: "md" }}
+          boxShadow={{ base: "none", md: "md" }}
+        >
           <Outlet />
         </Flex>
       </Flex>

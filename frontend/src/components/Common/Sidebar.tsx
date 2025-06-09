@@ -1,4 +1,11 @@
-import { Box, Flex, IconButton, Text } from "@chakra-ui/react"
+import { useColorModeValue } from "@/components/ui/color-mode"
+import {
+  Box,
+  Flex,
+  IconButton,
+  Text,
+  useBreakpointValue,
+} from "@chakra-ui/react"
 import { useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 import { FaBars } from "react-icons/fa"
@@ -16,16 +23,19 @@ import {
 } from "../ui/drawer"
 import HistoryItems from "./HistoryItems"
 
-
 const Sidebar = () => {
   const queryClient = useQueryClient()
   const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"])
   const { logout } = useAuth()
   const [open, setOpen] = useState(false)
 
+  const bg = useColorModeValue("white", "gray.800")
+  const borderColor = useColorModeValue("gray.200", "gray.700")
+  const displaySidebarDesktop = useBreakpointValue({ base: "none", md: "flex" })
+
   return (
     <>
-      {/* Mobile */}
+      {/* Mobile Drawer */}
       <DrawerRoot
         placement="start"
         open={open}
@@ -38,58 +48,81 @@ const Sidebar = () => {
             color="inherit"
             display={{ base: "flex", md: "none" }}
             aria-label="Open Menu"
-            position="absolute"
-            zIndex="100"
+            position="fixed"
+            zIndex="overlay"
             m={4}
+            size="lg"
           >
             <FaBars />
           </IconButton>
         </DrawerTrigger>
-        <DrawerContent maxW="xs">
+        <DrawerContent
+          maxW="xs"
+          bg={bg}
+          borderRight="1px"
+          borderColor={borderColor}
+          pt={4}
+          pb={6}
+        >
           <DrawerCloseTrigger />
           <DrawerBody>
-            <Flex flexDir="column" justify="space-between">
+            <Flex flexDir="column" justify="space-between" h="full">
               <Box>
                 <HistoryItems onClose={() => setOpen(false)} />
+                {currentUser?.email && (
+                  <Text
+                    fontSize="sm"
+                    p={3}
+                    mt={4}
+                    borderTop="1px"
+                    borderColor={borderColor}
+                    lineHeight={1}
+                  >
+                    Logged in as: {currentUser.email}
+                  </Text>
+                )}
                 <Flex
                   as="button"
-                  onClick={() => {
-                    logout()
-                  }}
+                  onClick={logout}
                   alignItems="center"
-                  gap={4}
+                  gap={3}
                   px={4}
-                  py={2}
+                  py={3}
+                  mt={4}
+                  rounded="md"
+                  cursor="pointer"
+                  color="red.600"
+                  _hover={{ bg: "red.50" }}
                 >
-                  <FiLogOut />
-                  <Text>Log Out</Text>
+                  <FiLogOut size="20px" />
+                  <Text fontWeight="medium">Log Out</Text>
                 </Flex>
               </Box>
-              {currentUser?.email && (
-                <Text fontSize="sm" p={2} truncate maxW="sm">
-                  Logged in as: {currentUser.email}
-                </Text>
-              )}
             </Flex>
           </DrawerBody>
           <DrawerCloseTrigger />
         </DrawerContent>
       </DrawerRoot>
 
-      {/* Desktop */}
-
+      {/* Desktop Sidebar */}
       <Box
-        display={{ base: "none", md: "flex" }}
+        display={displaySidebarDesktop}
         position="sticky"
-        bg="bg.subtle"
         top={0}
-        minW="xs"
+        bg={bg}
+        borderRight="1px"
+        borderColor={borderColor}
+        minW="64"
         h="100vh"
-        p={4}
+        boxShadow="sm"
       >
-        <Box w="100%">
-          <HistoryItems />
-        </Box>
+        <Flex direction="column" h="full">
+          <Box flex="1" overflowY="auto" p={6}>
+            <HistoryItems />
+          </Box>
+          <Box borderTop="1px" p={4}>
+          </Box>
+        </Flex>
       </Box>
     </>
   )

@@ -6,19 +6,12 @@ import useAuth from "@/hooks/useAuth"
 import { Box, Flex, Icon, Text } from "@chakra-ui/react"
 import { useQuery } from "@tanstack/react-query"
 import { Link as RouterLink } from "@tanstack/react-router"
-import { FiBriefcase, FiClock, FiHome, FiSettings } from "react-icons/fi"
+import { FiClock, FiEdit } from "react-icons/fi"
 import type { IconType } from "react-icons/lib"
 
 // Define the static menu items
 const staticItems = [
-  { icon: FiHome, title: "Dashboard", path: "/", key: "dashboard" },
-  { icon: FiBriefcase, title: "Items", path: "/items", key: "items" },
-  {
-    icon: FiSettings,
-    title: "User Settings",
-    path: "/settings",
-    key: "settings",
-  },
+  { icon: FiEdit, title: "New Research", path: "/", key: "newresearch" },
 ]
 
 interface SidebarItemsProps {
@@ -53,7 +46,7 @@ const HistoryItems = ({ onClose }: SidebarItemsProps) => {
       title: historyItem.company_name,
       path: `/h/${historyItem.id}`,
       key: historyItem.id,
-    })) || [] // Default to an empty array
+    })) || []
 
   const finalItems: Item[] = [...staticItems, ...dynamicHistoryItems]
 
