@@ -1,23 +1,19 @@
-import {
-  type CompetitorAnalysis
-} from "@/client"
+import { type CompetitorAnalysis } from "@/client"
 import { renderList } from "@/components/researchAgent/researchComponet/commonutils"
-import {
-  Box,
-  Heading,
-  Text
-} from "@chakra-ui/react"
+import { Box, Heading, Text } from "@chakra-ui/react"
 
 export function competitorAnalysisRenderer(
   key: string,
-  comp: CompetitorAnalysis,
+  comp: CompetitorAnalysis
 ) {
   return (
-    <Box mb={6} key={key}>
-      <Heading size="lg" mb={2}>
+    <Box mb={8} key={key}>
+      <Heading size="lg" mb={4}>
         Competitor Analysis
       </Heading>
-      <Text mb={3}>{comp.description ?? "Unable to find data."}</Text>
+      <Text mb={4}>
+        {comp.description ?? "No description available."}
+      </Text>
 
       <Heading size="md" mt={2}>
         Competitors
