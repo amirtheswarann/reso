@@ -1,5 +1,3 @@
-// src/routes/login.tsx
-
 import { useColorModeValue } from "@/components/ui/color-mode"
 import {
   Container,
@@ -8,7 +6,7 @@ import {
   Image,
   Input,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react"
 import {
   Link as RouterLink,
@@ -52,7 +50,7 @@ function Login() {
     resetError()
     try {
       await loginMutation.mutateAsync(data)
-    } catch { }
+    } catch {}
   }
 
   return (
@@ -63,16 +61,28 @@ function Login() {
       bg={useColorModeValue("gray.50", "gray.900")}
       px={4}
     >
-      <Container maxW="md" p={8} bg="white" borderRadius="md" boxShadow="lg">
+      <Container
+        maxW="md"
+        p={8}
+        bg={useColorModeValue("white", "gray.800")}
+        borderRadius="md"
+        boxShadow="lg"
+      >
         <VStack gap={6} as="form" onSubmit={handleSubmit(onSubmit)}>
           <Image src={Logo()} alt="Company Researcher Logo" maxW="150px" />
           <Heading size="lg" textAlign="center">
             Welcome Back to Company Researcher
           </Heading>
-          <Field invalid={!!errors.username} errorText={errors.username?.message || !!error}>
+          <Field
+            invalid={!!errors.username}
+            errorText={errors.username?.message || !!error}
+          >
             <InputGroup w="100%" startElement={<FiMail />}>
               <Input
-                {...register("username", { required: "Email is required", pattern: emailPattern })}
+                {...register("username", {
+                  required: "Email is required",
+                  pattern: emailPattern,
+                })}
                 placeholder="Email"
                 type="email"
               />

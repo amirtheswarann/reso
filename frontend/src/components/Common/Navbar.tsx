@@ -11,8 +11,8 @@ import UserMenu from "./UserMenu"
 function Navbar() {
   const display = useBreakpointValue({ base: "none", md: "flex" })
 
-  const bg = useColorModeValue("white", "gray.900")
-  const borderColor = useColorModeValue("gray.200", "gray.700")
+  const bg = useColorModeValue("white", "gray.700")
+  const borderColor = useColorModeValue("gray.200", "gray.800")
 
   return (
     <Flex

@@ -12,8 +12,8 @@ const DraggableComponent = ({
   name: string
   description: string
 }) => {
-  const bg = useColorModeValue("white", "gray.700")
-  const hoverBg = useColorModeValue("gray.50", "gray.600")
+  const bg = useColorModeValue("white", "gray.820")
+  const hoverBg = useColorModeValue("gray.50", "gray.700")
   const borderColor = useColorModeValue("gray.200", "gray.600")
   const textColor = useColorModeValue("gray.600", "gray.300")
 

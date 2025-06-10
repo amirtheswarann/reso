@@ -49,7 +49,7 @@ export const DroppableArea = ({
 
   const borderColor = useColorModeValue("gray.300", "gray.600")
   const activeBorderColor = useColorModeValue("teal.400", "teal.300")
-  const bg = useColorModeValue("gray.50", "gray.800")
+  const bg = useColorModeValue("gray.50", "gray.900")
   const activeBg = useColorModeValue("teal.50", "teal.900")
   const emptyTextColor = useColorModeValue("gray.500", "gray.400")
 

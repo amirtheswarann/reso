@@ -53,6 +53,7 @@ export const DroppedItem = ({
 
   const bg = useColorModeValue("white", "gray.700")
   const textColor = useColorModeValue("gray.800", "gray.200")
+  const hoverBg = useColorModeValue("gray.50", "gray.600")
 
   return (
     <Flex
@@ -73,6 +74,7 @@ export const DroppedItem = ({
         size="sm"
         variant="ghost"
         colorScheme="red"
+        _hover={ {bg: hoverBg }}
         aria-label="Remove"
         onClick={() => removeItem(id)}
       >

@@ -29,8 +29,8 @@ const Sidebar = () => {
   const { logout } = useAuth()
   const [open, setOpen] = useState(false)
 
-  const bg = useColorModeValue("white", "gray.800")
-  const borderColor = useColorModeValue("gray.200", "gray.700")
+  const bg = useColorModeValue("white", "gray.900")
+  const borderColor = useColorModeValue("gray.200", "gray.800")
   const displaySidebarDesktop = useBreakpointValue({ base: "none", md: "flex" })
 
   return (

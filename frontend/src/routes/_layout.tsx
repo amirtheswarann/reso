@@ -30,7 +30,7 @@ function Layout() {
           direction="column"
           p={{ base: 3, md: 6 }}
           overflowY="auto"
-          bg={useColorModeValue("white", "gray.800")}
+          bg={useColorModeValue("white", "gray.900")}
           roundedLeft={{ base: 0, md: "md" }}
           boxShadow={{ base: "none", md: "md" }}
         >

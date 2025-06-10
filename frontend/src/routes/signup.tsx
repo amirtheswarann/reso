@@ -1,5 +1,3 @@
-// src/routes/signup.tsx
-
 import { useColorModeValue } from "@/components/ui/color-mode"
 import {
   Container,
@@ -8,7 +6,7 @@ import {
   Image,
   Input,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react"
 import {
   Link as RouterLink,
@@ -68,16 +66,28 @@ function SignUp() {
       bg={useColorModeValue("gray.50", "gray.900")}
       px={4}
     >
-      <Container maxW="md" p={8} bg="white" borderRadius="md" boxShadow="lg">
+      <Container
+        maxW="md"
+        p={8}
+        bg={useColorModeValue("white", "gray.800")}
+        borderRadius="md"
+        boxShadow="lg"
+      >
         <VStack gap={6} as="form" onSubmit={handleSubmit(onSubmit)}>
           <Image src={Logo()} alt="Company Researcher Logo" maxW="150px" />
           <Heading size="lg" textAlign="center">
             Join Company Researcher
           </Heading>
-          <Field invalid={!!errors.full_name} errorText={errors.full_name?.message}>
+          <Field
+            invalid={!!errors.full_name}
+            errorText={errors.full_name?.message}
+          >
             <InputGroup w="100%" startElement={<FiUser />}>
               <Input
-                {...register("full_name", { required: "Full Name is required", minLength: 3 })}
+                {...register("full_name", {
+                  required: "Full Name is required",
+                  minLength: 3,
+                })}
                 placeholder="Full Name"
                 type="text"
               />
@@ -86,7 +96,10 @@ function SignUp() {
           <Field invalid={!!errors.email} errorText={errors.email?.message}>
             <InputGroup w="100%" startElement={<FiUser />}>
               <Input
-                {...register("email", { required: "Email is required", pattern: emailPattern })}
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: emailPattern,
+                })}
                 placeholder="Email"
                 type="email"
               />
@@ -102,7 +115,10 @@ function SignUp() {
           <PasswordInput
             type="password"
             startElement={<FiLock />}
-            {...register("confirm_password", confirmPasswordRules(getValues))}
+            {...register(
+              "confirm_password",
+              confirmPasswordRules(getValues)
+            )}
             placeholder="Confirm Password"
             errors={errors}
           />

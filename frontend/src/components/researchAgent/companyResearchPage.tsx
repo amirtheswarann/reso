@@ -92,8 +92,8 @@ const CompanyResearchPage = () => {
     setTimeout(() => setLoading(false), 1000)
   }
 
-  const panelBg = useColorModeValue("white", "gray.800")
-  const inputBg = useColorModeValue("gray.50", "gray.700")
+  const panelBg = useColorModeValue("white", "gray.900")
+  const inputBg = useColorModeValue("gray.50", "gray.800")
 
   return (
     <>

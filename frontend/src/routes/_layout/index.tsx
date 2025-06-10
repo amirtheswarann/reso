@@ -1,7 +1,7 @@
 import { Container } from "@chakra-ui/react"
 import { createFileRoute } from "@tanstack/react-router"
 
-import CompanyResearchPage from "@/components/researchAgent/companyResearchPage" // Import the component
+import CompanyResearchPage from "@/components/researchAgent/companyResearchPage"
 
 export const Route = createFileRoute("/_layout/")({
   component: CompanyResearch,
