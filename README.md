@@ -28,5 +28,15 @@ git fetch origin amirtheswaran-cr && git checkout amirtheswaran-cr
 2. In the **root directory** of the project, run:
 
    ```bash
-   docker-compose watch
+   docker compose build
+   docker compose up
    ```
+3. If you are facing any problem, run:
+
+   ```bash
+   docker compose build --no-cache
+   docker compose up
+   ```
+
+4. go to the url [http://localhost:5173](http://localhost:5173) for the application.
+5. go to the url [http://localhost:8000](http://localhost:8000) for the backend open api documentation
