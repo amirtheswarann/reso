@@ -40,3 +40,9 @@ git fetch origin amirtheswaran-cr && git checkout amirtheswaran-cr
 
 4. go to the url [http://localhost:5173](http://localhost:5173) for the application.
 5. go to the url [http://localhost:8000](http://localhost:8000) for the backend open api documentation
+
+###Technical decisions
+used gemini retirival feature instead of serper in the v2 api. ( all the pro llm models of gemini are able to retrieve real time data fast and accurately compared to serper )
+
+I am usign gemini-2.0-flash because i ran out of free credits
+the application should use the pro version because the retrival feature works best on pro versions.
