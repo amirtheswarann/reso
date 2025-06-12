@@ -29,8 +29,6 @@ openapi.json
 /playwright/.cache/
 /playwright/.auth/
 
-.env
-
 
 #llm
 .llm/*
