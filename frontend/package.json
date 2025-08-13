@@ -31,7 +31,7 @@
     "@chakra-ui/cli": "^3.19.2",
     "@hey-api/openapi-ts": "^0.57.0",
     "@playwright/test": "^1.52.0",
-    "@tanstack/router-devtools": "1.19.1",
+    "@tanstack/router-devtools": "1.131.8",
     "@tanstack/router-vite-plugin": "1.19.0",
     "@types/node": "^22.15.3",
     "@types/react": "^18.2.37",
